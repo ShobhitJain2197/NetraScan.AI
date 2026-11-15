@@ -1,0 +1,21 @@
+{
+    "experiment": "vit_v4",
+    "model": "vit_base_patch16_224",
+    "dataset_version": "v4",
+    "num_classes": 3,
+    "class_names": [
+        "normal",
+        "immature",
+        "mature"
+    ],
+    "epochs": 10,
+    "batch_size": 16,
+    "learning_rate": 2e-05,
+    "weight_decay": 0.01,
+    "patience": 3,
+    "seed": 42,
+    "optimizer": "AdamW",
+    "loss": "CrossEntropyLoss",
+    "mixed_precision": true,
+    "selection_metric": "validation_macro_f1"
+}
