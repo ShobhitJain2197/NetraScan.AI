@@ -1,0 +1,20 @@
+
+# NetraScan.AI — Application Dependencies
+# Python 3.11
+
+torch==2.9.0
+torchvision==0.24.0
+timm==1.0.22
+
+gradio==6.32.0
+grad-cam==1.5.7
+opencv-python==5.0.0.93
+
+numpy
+pandas==2.3.3
+Pillow
+plotly==6.9.0
+
+safetensors==0.6.2
+huggingface-hub==2.4.0
+matplotlib

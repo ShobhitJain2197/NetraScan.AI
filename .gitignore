@@ -19,3 +19,106 @@ venv/
 
 .env
 .env.*
+
+
+
+# NetraScan.AI — Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Local environments and portable runtime
+.venv/
+venv/
+env/
+runtime/
+.python-version
+
+# IDE and operating system
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Model checkpoints and weights
+models/
+*.pth
+*.pt
+*.ckpt
+*.onnx
+*.safetensors
+
+# Large datasets and image collections
+data/raw/
+data/processed/
+data/images/
+datasets/
+Dataset Katarak/
+Cataract v01*/
+SLID/
+
+# Generated application outputs
+reports/
+logs/
+results/generated/
+gradio_cached_examples/
+flagged/
+temp/
+tmp/
+
+# Environment variables and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Jupyter temporary files
+.ipynb_checkpoints/
+
+# NetraScan.AI — Additional exclusions
+
+# Python
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Portable runtime and environments
+env/
+runtime/
+.python-version
+.vscode/
+
+# Model weights and checkpoints
+models/
+*.onnx
+
+# Large datasets
+data/raw/
+data/processed/
+data/images/
+datasets/
+Dataset Katarak/
+Cataract v01*/
+SLID/
+
+# Generated application files
+reports/
+logs/
+results/generated/
+gradio_cached_examples/
+flagged/
+temp/
+tmp/
+
+# Credentials
+*.pem
+*.key
+
+# Keep research result figures
+!results/**/*.png
+!results/**/*.jpg
+!results/**/*.jpeg
