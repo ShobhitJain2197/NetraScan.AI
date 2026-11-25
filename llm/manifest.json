@@ -1,0 +1,26 @@
+{
+    "model": "Qwen2.5-3B-Instruct",
+    "repository": "Qwen/Qwen2.5-3B-Instruct-GGUF",
+    "revision": "7dabda4d13d513e3e842b20f0d435c732f172cbe",
+    "quantization": "Q4_K_M",
+    "format": "GGUF",
+    "model_path": "llm/weights/qwen2.5-3b-instruct-q4_k_m.gguf",
+    "model_sha256": "626b4a6678b86442240e33df819e00132d3ba7dddfe1cdc4fbb18e0a9615c62d",
+    "model_size_bytes": 2104932768,
+    "backend": "llama.cpp",
+    "backend_release": "b12716",
+    "backend_executable": "llm/backend/llama-server.exe",
+    "backend_archives": [
+        {
+            "filename": "llama-b12716-bin-win-cuda-12.4-x64.zip",
+            "sha256": "2bf3a5b7f4862ce0b82ecfe35b3ef1e9b2b0fe6a878c1908dccc73baa0c216bc",
+            "size_bytes": 358605327
+        },
+        {
+            "filename": "cudart-llama-bin-win-cuda-12.4-x64.zip",
+            "sha256": "8c79a9b226de4b3cacfd1f83d24f962d0773be79f1e7b75c6af4ded7e32ae1d6",
+            "size_bytes": 391443627
+        }
+    ],
+    "target_context_size": 4096
+}

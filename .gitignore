@@ -1,35 +1,19 @@
-﻿__pycache__/
-*.pyc
-.ipynb_checkpoints/
-.venv/
-venv/
-.idea/
+# ============================================================
+# NetraScan.AI V2
+# Repository exclusions
+# ============================================================
 
-*.pth
-*.pt
-*.ckpt
-*.safetensors
-
-*.jpg
-*.jpeg
-*.bmp
-*.tif
-*.tiff
-*.webp
-
-.env
-.env.*
-
-
-
-# NetraScan.AI — Python
+# Python cache and build artifacts
 __pycache__/
 *.py[cod]
 *.egg-info/
 .pytest_cache/
 .mypy_cache/
+.ruff_cache/
+build/
+dist/
 
-# Local environments and portable runtime
+# Virtual environments and portable runtime
 .venv/
 venv/
 env/
@@ -42,7 +26,10 @@ runtime/
 .DS_Store
 Thumbs.db
 
-# Model checkpoints and weights
+# Jupyter temporary files
+.ipynb_checkpoints/
+
+# Vision model checkpoints
 models/
 *.pth
 *.pt
@@ -50,51 +37,17 @@ models/
 *.onnx
 *.safetensors
 
-# Large datasets and image collections
-data/raw/
-data/processed/
-data/images/
-datasets/
-Dataset Katarak/
-Cataract v01*/
-SLID/
-
-# Generated application outputs
-reports/
-logs/
-results/generated/
-gradio_cached_examples/
-flagged/
-temp/
-tmp/
-
-# Environment variables and credentials
-.env
-.env.*
-!.env.example
-*.pem
-*.key
-
-# Jupyter temporary files
-.ipynb_checkpoints/
-
-# NetraScan.AI — Additional exclusions
-
-# Python
-*.py[cod]
-*.egg-info/
-.pytest_cache/
-.mypy_cache/
-
-# Portable runtime and environments
-env/
-runtime/
-.python-version
-.vscode/
-
-# Model weights and checkpoints
-models/
-*.onnx
+# Local GenAI models and runtime binaries
+llm/weights/
+llm/backend/
+llm/downloads/
+*.gguf
+*.exe
+*.dll
+*.lib
+*.pyd
+*.zip
+*.7z
 
 # Large datasets
 data/raw/
@@ -105,20 +58,50 @@ Dataset Katarak/
 Cataract v01*/
 SLID/
 
-# Generated application files
+# Generated reports and local testing artifacts
 reports/
 logs/
+tests/
 results/generated/
 gradio_cached_examples/
 flagged/
 temp/
 tmp/
+*.log
 
-# Credentials
+# Private images and media
+*.png
+*.jpg
+*.jpeg
+*.bmp
+*.tif
+*.tiff
+*.webp
+*.gif
+*.mp4
+
+# Credentials and sensitive configuration
+.env
+.env.*
+!.env.example
 *.pem
 *.key
 
-# Keep research result figures
+# Approved research figures
 !results/**/*.png
 !results/**/*.jpg
 !results/**/*.jpeg
+
+# Approved benchmark figures
+!benchmarks/**/01_gpu_memory_utilization.png
+!benchmarks/**/02_cold_warm_latency.png
+!benchmarks/**/03_transformer_inference_latency.png
+!benchmarks/**/04_llm_generation_throughput.png
+!benchmarks/**/05_narrative_validation.png
+!benchmarks/**/06_adversarial_validation.png
+
+# Public application assets
+!assets/background.png
+!assets/background.jpg
+!assets/background.jpeg
+!assets/background.webp

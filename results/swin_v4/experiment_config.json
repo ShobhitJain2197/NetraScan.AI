@@ -1,0 +1,28 @@
+{
+    "model": "Swin-Tiny",
+    "architecture": "swin_tiny_patch4_window7_224",
+    "dataset": "V4",
+    "train_images": 2454,
+    "val_images": 517,
+    "test_images": 571,
+    "num_classes": 3,
+    "epochs": 10,
+    "batch_size": 16,
+    "learning_rate": 2e-05,
+    "weight_decay": 0.01,
+    "early_stopping_patience": 3,
+    "optimizer": "AdamW",
+    "loss": "CrossEntropyLoss",
+    "mixed_precision": true,
+    "normalization_mean": [
+        0.485,
+        0.456,
+        0.406
+    ],
+    "normalization_std": [
+        0.229,
+        0.224,
+        0.225
+    ],
+    "parameters": 27521661
+}

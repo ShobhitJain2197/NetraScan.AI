@@ -1,295 +1,602 @@
-# NetraScan.AI
+﻿<div align="center">
 
-### Multi-Transformer Cataract Classification & Explainable AI
+# NetraScan.AI V2
 
-**An AI-powered academic research prototype for cataract classification using Vision Transformer (ViT), Swin Transformer, and MobileViT, with ensemble inference, Grad-CAM explainability, and automated report generation.**
+### Three Transformers. One Vision.
 
-**Created by Mr. SHOBHIT JAIN**
+**Multi-Transformer Cataract Classification, Explainable AI and Local Generative AI**
+
+![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.9.0-EE4C2C?logo=pytorch&logoColor=white)
+![CUDA](https://img.shields.io/badge/CUDA-12.8-76B900?logo=nvidia&logoColor=white)
+![Gradio](https://img.shields.io/badge/Gradio-6.32.0-orange)
+![Version](https://img.shields.io/badge/Version-2.0.0-blue)
+![Research](https://img.shields.io/badge/Purpose-Academic_Research-purple)
+
+**Created and developed by Mr. SHOBHIT JAIN**
+
+</div>
 
 ---
 
 ## 1. Project Overview
 
-NetraScan.AI is a deep learning-based cataract classification system designed to analyze eye images and categorize them into three classes:
+NetraScan.AI is an academic AI research prototype that investigates
+transformer-based image classification for cataract assessment.
 
-- **Normal**
-- **Immature Cataract**
-- **Mature Cataract**
+The system integrates three distinct vision transformer architectures,
+majority-voting ensemble inference, Grad-CAM explainability and a locally
+executed generative language model.
 
-The system integrates three transformer-based computer vision architectures and combines their predictions using majority voting.
+The classification pipeline categorizes eye images into three classes:
 
-An interactive Gradio interface enables users to upload eye images, inspect model confidence scores, visualize Grad-CAM activation maps, and generate structured classification reports.
+- Normal
+- Immature Cataract
+- Mature Cataract
 
-The project is intended for academic research, experimentation, and demonstration—not clinical diagnosis.
+Version 2 extends the original classification system with grounded local
+generative AI, automated PDF research reports, narrative validation,
+runtime performance analysis and offline portable deployment.
+
+> This project is intended for academic research and demonstration.
+> It is not a clinically validated medical device or a substitute for
+> professional ophthalmological examination.
 
 ## 2. Key Features
 
-- **Multi-Transformer Architecture:** Integrates ViT-B/16, Swin-Tiny, and MobileViT-S.
-- **Ensemble Classification:** Combines predictions from all three models using majority voting.
-- **Explainable AI:** Generates Swin-Tiny Grad-CAM activation heatmaps and image overlays.
-- **Confidence Visualization:** Displays per-model class probabilities and inference latency.
-- **Interactive Web Interface:** Built using Gradio with image upload and webcam input.
-- **Automated Reporting:** Generates downloadable Markdown classification reports.
-- **Portable Deployment:** Supports execution from an external SSD using a bundled Python runtime.
-- **GPU Acceleration:** Uses NVIDIA CUDA when available, with CPU fallback.
+- Three independently trained vision transformer architectures.
+- Majority-voting ensemble with explicit model agreement reporting.
+- Per-model class probabilities, confidence scores and inference latency.
+- Swin-Tiny Grad-CAM heatmaps and activation overlays.
+- Local Qwen2.5-3B-Instruct generative AI.
+- Structured factual grounding and narrative validation.
+- Deterministic reporting fallback when generation fails validation.
+- Downloadable PDF research reports.
+- Interactive Gradio interface with image upload and webcam input.
+- Lazy model initialization and local LLM resource management.
+- NVIDIA CUDA acceleration.
+- Offline portable deployment after required artifacts are provisioned.
 
-## 3. Model Architectures
+## 3. System Architecture
 
-| Architecture | Implementation | Input Resolution |
-|---|---|---|
-| Vision Transformer | ViT-B/16 | 224 × 224 |
-| Swin Transformer | Swin-Tiny | 224 × 224 |
-| Mobile Vision Transformer | MobileViT-S | 256 × 256 |
+```mermaid
+flowchart TD
+    A[Eye Image Upload or Webcam] --> B[Architecture-Specific Preprocessing]
+
+    B --> C[ViT-B/16]
+    B --> D[Swin-Tiny]
+    B --> E[MobileViT-S]
+
+    C --> F[Model Predictions and Probabilities]
+    D --> F
+    E --> F
+
+    F --> G[Majority Voting]
+    G --> H[Classification and Agreement]
+
+    D --> I[Grad-CAM Explainability]
+
+    H --> J[Verified Inference Facts]
+    J --> K[Local Qwen2.5-3B-Instruct]
+    K --> L[Narrative Validation]
+
+    L -->|Accepted| M[Grounded AI Narrative]
+    L -->|Rejected or Unavailable| N[Deterministic Fallback]
+
+    M --> O[PDF Research Report]
+    N --> O
+    I --> O
+    F --> O
+```
+
+The vision models remain responsible for classification. The language
+model does not independently diagnose cataracts or modify model predictions.
+
+## 4. Dataset Engineering
+
+The V4 dataset contains 3,542 images consolidated from two cataract
+image collections.
+
+| Dataset partition | Normal | Immature | Mature | Total |
+|---|---:|---:|---:|---:|
+| Training | 799 | 837 | 818 | 2,454 |
+| Validation | 178 | 164 | 175 | 517 |
+| Testing | 192 | 195 | 184 | 571 |
+| Total | 1,169 | 1,196 | 1,177 | 3,542 |
+
+### Dataset preparation
+
+The dataset engineering pipeline includes:
+
+- Three-class label harmonization.
+- SHA-256 exact duplicate identification.
+- Perceptual hashing for visually similar images.
+- Visual family grouping.
+- Group-aware dataset partitioning.
+- Cross-partition integrity checks.
+- Architecture-specific image preprocessing.
+
+### V4 integrity checks
+
+| Integrity criterion | Result |
+|---|---:|
+| Visual families | 2,746 |
+| Visual families crossing partitions | 0 |
+| Cross-partition pHash pairs at distance <= 4 | 0 |
+| Cross-partition Roboflow lineages | 0 |
+| Missing image paths during dataset verification | 0 |
+
+These checks reduce identifiable dataset leakage risks but do not
+establish complete independence at the patient level.
+
+## 5. Model Architectures
+
+| Architecture | Input resolution | Parameters |
+|---|---:|---:|
+| ViT-B/16 | 224 x 224 | 85,800,963 |
+| Swin-Tiny | 224 x 224 | 27,521,661 |
+| MobileViT-S | 256 x 256 | 4,939,555 |
 
 ### Vision Transformer (ViT-B/16)
 
-ViT processes images as sequences of patches using transformer-based self-attention. This enables the model to learn relationships between different regions of an eye image.
+ViT divides an image into fixed-size patches and processes patch
+embeddings using transformer encoder blocks and global self-attention.
 
 ### Swin Transformer (Swin-Tiny)
 
-Swin Transformer uses hierarchical feature extraction and shifted-window self-attention. Its intermediate representations are also used for Grad-CAM visualization in this project.
+Swin employs hierarchical feature representations and shifted-window
+self-attention to capture local and progressively broader spatial features.
 
 ### MobileViT-S
 
-MobileViT combines convolutional operations with transformer-based global representations, providing a relatively lightweight architecture for image classification.
+MobileViT combines convolutional feature extraction with transformer-based
+global representation learning in a compact architecture.
 
-## 4. Dataset and Preprocessing
+### Training configuration
 
-The project uses a consolidated eye-image dataset assembled from multiple sources, including:
+| Hyperparameter | Configuration |
+|---|---|
+| Maximum epochs | 10 |
+| Batch size | 16 |
+| Learning rate | 2e-5 |
+| Weight decay | 0.01 |
+| Optimizer | AdamW |
+| Loss function | CrossEntropyLoss |
+| Early stopping patience | 3 |
+| Mixed precision | Enabled |
 
-- Cataract v01
-- Dataset Katarak
-- Slit-lamp image resources used during dataset investigation
+Individual experiment configurations are available in the results directory.
 
-The final V4 classification dataset contains **3,542 images**.
+## 6. Experimental Results
 
-| Split | Images |
+All reported classification results below are based on the V4 held-out
+test partition containing 571 images.
+
+| Model | Accuracy | Macro Precision | Macro Recall | Macro F1 | Correct | Errors |
+|---|---:|---:|---:|---:|---:|---:|
+| ViT-B/16 | 97.37% | 97.62% | 97.28% | 97.35% | 556 | 15 |
+| Swin-Tiny | **98.95%** | **99.00%** | **98.91%** | **98.94%** | **565** | **6** |
+| MobileViT-S | 98.25% | 98.34% | 98.24% | 98.27% | 561 | 10 |
+| Majority Voting | 98.25% | - | - | - | 561 | 10 |
+
+Swin-Tiny achieved the highest individual test accuracy.
+MobileViT-S achieved competitive performance with approximately
+4.94 million parameters.
+
+The majority-voting ensemble exceeded ViT-B/16 accuracy, matched
+MobileViT-S accuracy and remained below Swin-Tiny accuracy.
+
+### Model comparison dashboard
+
+![Model Comparison](results/comparison_v4/model_comparison_dashboard.png)
+
+### Training curves and confusion matrices
+
+| Architecture | Training curve | Test confusion matrix |
+|---|---|---|
+| ViT-B/16 | ![ViT Training](results/vit_v4/vit_v4_accuracy_curve.png) | ![ViT Confusion](results/vit_v4/vit_v4_confusion_matrix.png) |
+| Swin-Tiny | ![Swin Training](results/swin_v4/swin_v4_accuracy_curve.png) | ![Swin Confusion](results/swin_v4/swin_v4_confusion_matrix.png) |
+| MobileViT-S | ![MobileViT Training](results/mobilevit_v4/mobilevit_v4_accuracy_curve.png) | ![MobileViT Confusion](results/mobilevit_v4/mobilevit_v4_confusion_matrix.png) |
+
+### Cross-model error analysis
+
+![Cross-Model Error Analysis](results/comparison_v4/cross_model_error_dashboard.png)
+
+| Error agreement | Test images |
 |---|---:|
-| Training | 2,454 |
-| Validation | 517 |
-| Testing | 571 |
-| **Total** | **3,542** |
+| All three models correct | 550 |
+| Exactly one model incorrect | 11 |
+| Exactly two models incorrect | 10 |
+| All three models incorrect | 0 |
 
-The dataset engineering pipeline includes duplicate detection using perceptual hashing, visual-family grouping, class organization, preprocessing, and split-integrity verification.
+The ensemble provides a mechanism for inspecting agreement between
+architectures rather than guaranteeing improved classification accuracy.
 
-Family-aware partitioning was used to reduce the risk of closely related images appearing across training, validation, and test sets.
+Sanitized per-image predictions, aggregate metrics, training histories
+and experiment configurations are included in the results directory.
 
-## 5. Experimental Results
+## 7. Explainable AI
 
-The following results were obtained on the project's internal V4 test set of 571 images.
+NetraScan.AI uses Gradient-weighted Class Activation Mapping (Grad-CAM)
+with Swin-Tiny to generate class-specific spatial activation maps.
 
-| Model | Test Accuracy |
-|---|---:|
-| ViT-B/16 | 97.37% |
-| Swin-Tiny | **98.95%** |
-| MobileViT-S | 98.25% |
-| Majority-Voting Ensemble | 98.25% |
+The explanation pipeline:
 
-**Swin-Tiny achieved the highest individual test accuracy** in the evaluated configuration.
+1. Performs a forward pass through Swin-Tiny.
+2. Selects the predicted class as the explanation target.
+3. Extracts intermediate activations and corresponding gradients.
+4. Reshapes transformer feature representations into spatial maps.
+5. Computes and normalizes the class activation map.
+6. Produces a heatmap and an overlay on the original image.
 
-These results describe performance on the internal evaluation dataset. They do not establish clinical accuracy or generalization to all real-world eye images.
+Grad-CAM visualizations indicate regions associated with model
+predictions. They do not establish causal reasoning, lesion boundaries
+or clinically validated anatomical localization.
 
-## 6. Ensemble Classification
+## 8. Local Generative AI
 
-NetraScan.AI performs independent inference using three transformer models.
+Version 2 introduces a fully local report-generation pipeline using
+Qwen2.5-3B-Instruct through llama.cpp.
 
-Each model produces class probabilities for Normal, Immature Cataract, and Mature Cataract.
+| Component | Configuration |
+|---|---|
+| Language model | Qwen2.5-3B-Instruct |
+| Parameters | Approximately 3 billion |
+| Quantization | Q4_K_M |
+| Format | GGUF |
+| Inference backend | llama.cpp |
+| Backend release | b12716 |
+| Context window | 4,096 tokens |
+| GGUF file size | Approximately 2.10 GB |
 
-The final ensemble prediction is determined using majority voting.
+### Grounded generation pipeline
 
-The interface also displays the number of models agreeing with the ensemble result.
-
-## 7. Explainable Artificial Intelligence
-
-The project incorporates **Gradient-weighted Class Activation Mapping (Grad-CAM)** for visual explanation.
-
-Grad-CAM is applied to an intermediate Swin-Tiny feature representation to generate:
-
-1. An activation heatmap.
-2. A heatmap overlay on the original image.
-
-These visualizations help researchers investigate which image regions influence model predictions.
-
-**Important:** Grad-CAM highlights model activation patterns. It does not independently verify that a prediction is medically correct.
-
-## 8. Automated Classification Reports
-
-The application generates structured Markdown reports containing:
-
-- Predicted cataract category
-- Individual model predictions
-- Confidence scores
-- Inference latency
-- Ensemble agreement
-- Model architecture information
-- Explainability notes
-- Research limitations and disclaimers
-
-The current reporting implementation is **template-based and deterministic**. LLM-generated clinical-language reporting is a potential future extension.
-
-## 9. Project Structure
-
-```text
-NetraScan_GitHub/
-│
-├── app.py
-├── README.md
-├── requirements.txt
-├── START_NETRASCAN.bat
-├── .gitignore
-│
-├── src/
-│   ├── inference.py
-│   ├── explainability.py
-│   └── report_generator.py
-│
-├── notebooks/
-│   ├── NetraScanAI.ipynb
-│   ├── 01_dataset_pipeline.ipynb.ipynb
-│   └── 02_vit_training.ipynb
-│
-├── data/
-│   └── metadata/
-│
-├── results/
-│   └── vit_v4/
-│       ├── experiment_config.json
-│       ├── test_metrics.csv
-│       ├── test_predictions.csv
-│       ├── training_history.csv
-│       ├── vit_v4_accuracy_curve.png
-│       └── vit_v4_confusion_matrix.png
-│
-└── docs/
-    └── NetraScan_AI_Dataset_Engineering_Summary.docx
+```mermaid
+flowchart LR
+    A[Vision Predictions] --> B[Deterministic Fact Verification]
+    B --> C[Grounded Prompt]
+    C --> D[Local Language Model]
+    D --> E[Narrative Validator]
+    E -->|Pass| F[AI Narrative]
+    E -->|Fail| G[Deterministic Narrative]
+    F --> H[Research Report]
+    G --> H
 ```
 
-Large datasets, model checkpoints, local environments, and generated application reports are excluded from Git tracking.
+The application independently verifies model predictions, probability
+distributions, confidence values and ensemble agreement before report
+generation.
 
-## 10. Installation
+The language model receives constrained facts and generates a short
+interpretive narrative. Numerical results and classification labels
+remain under deterministic application control.
 
-### Requirements
+Generated narratives are checked for unsupported claims, contradictory
+agreement descriptions and other prohibited content.
 
-- Python 3.11
-- Windows or another compatible Python environment
-- NVIDIA GPU recommended for faster inference
-- Sufficient system RAM and storage for PyTorch and model dependencies
+When validation fails, or the local backend is unavailable during
+generation, the application can use a deterministic fallback narrative.
 
-Clone the repository:
+This architecture reduces observed grounding failures but does not
+guarantee hallucination-free language generation.
+
+## 9. Runtime Performance
+
+Reference environment:
+
+| Component | Specification |
+|---|---|
+| GPU | NVIDIA GeForce RTX 3080 12 GB |
+| CPU | Intel Core i7-12700K |
+| System memory | 64 GB |
+| Python | 3.11.5 |
+| PyTorch | 2.9.0+cu128 |
+| CUDA build | 12.8 |
+
+### GPU memory utilization
+
+![GPU Memory](benchmarks/figures/01_gpu_memory_utilization.png)
+
+| Runtime state | GPU memory used |
+|---|---:|
+| Initial system baseline | 2,458 MiB |
+| Vision pipeline initialized | 3,451 MiB |
+| Vision pipeline and local LLM | 5,750 MiB |
+| After releasing local LLM | 3,448 MiB |
+
+The combined workload increased measured GPU memory usage by
+approximately 3.21 GiB above the initial system baseline.
+
+### Cold and warm execution latency
+
+![Execution Latency](benchmarks/figures/02_cold_warm_latency.png)
+
+| Operation | Observed latency |
+|---|---:|
+| Cold vision pipeline | 2,179 ms |
+| Warm vision pipeline | 79 ms |
+| Cold GenAI operation, excluding PDF | 1,854 ms |
+| Warm report generation, including PDF | 336 ms |
+
+Cold GenAI and warm report measurements have different operation
+boundaries and should not be interpreted as a strictly equivalent
+speedup comparison.
+
+### Individual transformer inference latency
+
+![Transformer Latency](benchmarks/figures/03_transformer_inference_latency.png)
+
+### Local language model throughput
+
+![LLM Throughput](benchmarks/figures/04_llm_generation_throughput.png)
+
+The integrated local GenAI test recorded approximately 134.79
+generated tokens per second.
+
+### Narrative validation
+
+![Narrative Validation](benchmarks/figures/05_narrative_validation.png)
+
+The corrected validator accepted all three previously generated
+grounded regression examples.
+
+### Adversarial validation
+
+![Adversarial Validation](benchmarks/figures/06_adversarial_validation.png)
+
+All ten deliberately constructed adversarial narratives were rejected
+by the validator in the regression test.
+
+These are limited engineering tests, not comprehensive guarantees
+of language model safety or reliability.
+
+Runtime measurements are reference observations from controlled
+engineering tests rather than statistically averaged benchmarks.
+Performance varies with hardware, drivers, workload and system state.
+
+## 10. Automated PDF Research Reports
+
+The reporting pipeline generates structured PDF documents containing:
+
+- Ensemble classification and model agreement.
+- Individual model predictions and confidence values.
+- Per-class probability distributions.
+- Model inference latency.
+- Original input image and available Grad-CAM visualizations.
+- Validated local AI narrative or deterministic fallback.
+- Report identifier, methodology and research limitations.
+
+Report generation verifies that the current input image matches
+the previously analyzed image.
+
+Reports are generated locally and are excluded from version control.
+
+## 11. Repository Structure
+
+```text
+NetraScan.AI/
+|
+|-- app.py
+|-- requirements.txt
+|-- START_NETRASCAN.bat
+|-- README.md
+|
+|-- src/
+|   |-- inference.py
+|   |-- explainability.py
+|   |-- llm_reporter.py
+|   |-- pdf_reporter.py
+|   `-- report_generator.py
+|
+|-- notebooks/
+|   `-- NetraScanAI.ipynb
+|
+|-- data/
+|   `-- metadata/
+|
+|-- docs/
+|
+|-- results/
+|   |-- vit_v4/
+|   |-- swin_v4/
+|   |-- mobilevit_v4/
+|   `-- comparison_v4/
+|
+|-- benchmarks/
+|   |-- benchmark_summary.json
+|   `-- figures/
+|
+`-- llm/
+    `-- manifest.json
+```
+
+Model weights, raw image datasets, portable Python runtime files,
+LLM binaries, private images and generated reports are not bundled
+with the public source repository.
+
+## 12. Installation and Setup
+
+### Clone the repository
 
 ```bash
 git clone https://github.com/ShobhitJain2197/NetraScan.AI.git
 cd NetraScan.AI
 ```
 
-Install the required dependencies:
+### Create a Python environment
+
+Windows PowerShell:
+
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+```
+
+### Install CUDA-enabled PyTorch
+
+For the reference NVIDIA CUDA 12.8 environment:
+
+```bash
+python -m pip install torch==2.9.0 torchvision==0.24.0 --index-url https://download.pytorch.org/whl/cu128
+```
+
+Install the remaining application dependencies:
 
 ```bash
 python -m pip install -r requirements.txt
 ```
 
-For GPU acceleration, install a PyTorch build compatible with your NVIDIA driver and CUDA environment.
-
-### Model Checkpoints
-
-Trained model checkpoints are not included in the standard Git repository.
-
-To run inference, the required checkpoints must be placed in the model directory expected by `src/inference.py`.
-
-The source code alone is not sufficient to reproduce the trained inference results without these weights.
-
-## 11. Running the Application
-
-After configuring the Python environment and supplying the trained checkpoints, start the application:
+Verify CUDA availability:
 
 ```bash
+python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
+```
+
+A compatible NVIDIA driver is required for the reference GPU setup.
+
+### Provision vision checkpoints
+
+Place the trained checkpoints at the following relative paths:
+
+```text
+models/
+|-- vit_v4/
+|   `-- vit_v4_best.pth
+|-- swin_v4/
+|   `-- swin_v4_best.pth
+`-- mobilevit_v4/
+    `-- mobilevit_v4_best.pth
+```
+
+The original trained checkpoints are not distributed in this repository.
+Compatible checkpoints must be obtained separately or reproduced using
+the documented training pipeline and dataset.
+
+### Provision the local language model
+
+Download the GGUF model from:
+
+[Qwen2.5-3B-Instruct-GGUF](https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF)
+
+Use the model revision and Q4_K_M artifact specified in
+[llm/manifest.json](llm/manifest.json).
+
+Place the model at:
+
+```text
+llm/weights/qwen2.5-3b-instruct-q4_k_m.gguf
+```
+
+Download the Windows CUDA 12.4 x64 llama.cpp backend and matching
+CUDA runtime archives for release b12716 from:
+
+[llama.cpp Releases](https://github.com/ggml-org/llama.cpp/releases)
+
+Extract the backend executable and required runtime libraries into:
+
+```text
+llm/backend/
+```
+
+The expected executable is:
+
+```text
+llm/backend/llama-server.exe
+```
+
+Verify downloaded artifacts against the SHA-256 checksums in the
+manifest before use.
+
+### Launch the application
+
+After provisioning the required model artifacts:
+
+```powershell
+$env:MPLBACKEND = "Agg"
 python app.py
 ```
 
-Open the local Gradio URL displayed in the terminal, normally:
+Open the local application at:
 
-```text
 http://127.0.0.1:7860
-```
 
-### Portable SSD Deployment
+The application runs locally without creating a public Gradio share link.
 
-A separately prepared portable edition includes:
+## 13. Portable Deployment
 
-- Python 3.11 runtime
-- Installed dependencies
-- Trained model checkpoints
-- Application source code
-- Windows batch launcher
+NetraScan.AI supports a separately provisioned Windows portable
+deployment containing an independent Python runtime, vision checkpoints,
+local language model and required inference libraries.
 
-The portable application can be started using:
+The portable installation can execute from an external SSD without
+installing Python on the host system.
 
-```text
-START_NETRASCAN.bat
-```
+Compatible operating system, GPU drivers and sufficient system
+resources are still required.
 
-The portable edition has been functionally tested on a desktop RTX 3080 and a separate laptop GPU system.
+Once all required artifacts are available, classification and local
+report generation do not require a cloud inference API.
 
-**Note:** The GitHub source repository does not include the complete portable Python environment or trained model weights. Its launcher requires the corresponding portable runtime layout.
+The complete portable runtime is not included in this source repository.
 
-## 12. Technology Stack
+## 14. Research Limitations
 
-| Component | Technology |
-|---|---|
-| Programming language | Python |
-| Deep learning | PyTorch |
-| Vision architectures | timm |
-| User interface | Gradio |
-| Explainability | Grad-CAM |
-| Image processing | OpenCV, Pillow |
-| Numerical operations | NumPy |
-| Data analysis | pandas |
-| Visualization | Plotly, Matplotlib |
-| Hardware acceleration | NVIDIA CUDA |
+- Evaluation is restricted to the available V4 dataset.
+- Internal held-out performance does not establish clinical validity.
+- Patient-level independence has not been established.
+- Performance on unfamiliar cameras, lighting conditions and clinical
+  populations requires further evaluation.
+- Ensemble voting does not necessarily outperform the strongest
+  individual architecture.
+- Model confidence values are not validated clinical probabilities.
+- Grad-CAM is an attribution visualization rather than a diagnostic
+  localization method.
+- Narrative validation reduces tested failure modes but cannot guarantee
+  the absence of unsupported generated content.
 
-## 13. Limitations
+## 15. Version History
 
-NetraScan.AI is an academic research prototype with the following limitations:
+### V2.0.0
 
-- Evaluation primarily uses a curated internal dataset.
-- Performance on external clinical datasets has not been established.
-- Predictions may be unreliable for images captured under unfamiliar lighting, camera, or acquisition conditions.
-- Confidence scores are not equivalent to clinically calibrated probabilities.
-- Grad-CAM maps do not constitute clinical evidence.
-- The system does not replace ophthalmological examinations.
+- Local Qwen2.5-3B-Instruct integration.
+- Grounded narrative generation and deterministic validation.
+- Automated PDF research reports.
+- Updated interactive application.
+- Local LLM resource release and application shutdown controls.
+- Runtime performance and adversarial validation benchmarks.
+- Expanded model evaluation artifacts.
+- Updated portable deployment.
 
-## 14. Future Scope
+### V1.0.0
 
-Planned or potential improvements include:
+- V4 dataset engineering pipeline.
+- Three-transformer cataract classification.
+- Majority-voting ensemble inference.
+- Swin-Tiny Grad-CAM explainability.
+- Initial Gradio application and deterministic reporting.
 
-- Evaluation on additional independent datasets.
-- Broader testing with real-world eye photographs.
-- Improved confidence calibration and uncertainty handling.
-- Expanded explainability comparisons.
-- Integration of an LLM-assisted reporting module.
-- Further optimization for lower-resource hardware.
-- Additional research documentation and model comparisons.
+The original implementation is preserved through the Git tag v1.0.0.
 
-## 15. Author & Contributors
+## 16. Acknowledgements
 
-### Project Creator
+This project builds upon the research and open-source implementations
+of Vision Transformer, Swin Transformer, MobileViT, Grad-CAM, PyTorch,
+timm, Qwen, llama.cpp, Gradio and ReportLab.
 
-**Mr. SHOBHIT JAIN**
-
-**Role:** Project Creator, AI/ML Developer & Researcher
-
-**GitHub:** [ShobhitJain2197](https://github.com/ShobhitJain2197)
-
-## 16. Research Disclaimer
-
-**NetraScan.AI is developed strictly for academic research, education, and experimental evaluation.**
-
-It is not a certified medical device and must not be used as a substitute for professional diagnosis, medical advice, or clinical decision-making.
+Dataset ownership and third-party model licenses remain with their
+respective rights holders.
 
 ---
 
-**NetraScan.AI — Multi-Transformer Cataract Classification & Explainable AI**
+<div align="center">
 
-**Created by Mr. SHOBHIT JAIN**
+### NetraScan.AI
 
-*© 2026 NetraScan.AI. All rights reserved by the respective rights holders.*
+**Three Transformers. One Vision.**
+
+Developed by **Mr. SHOBHIT JAIN**
+
+Academic AI Research | Computer Vision | Explainable AI | Local GenAI
+
+</div>

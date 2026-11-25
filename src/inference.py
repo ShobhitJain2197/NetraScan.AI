@@ -15,21 +15,21 @@ CLASS_NAMES = ["normal", "immature", "mature"]
 MODEL_CONFIGS = {
     "ViT-B/16": {
         "architecture": "vit_base_patch16_224",
-        "checkpoint": "vit_v4_best.pth",
+        "checkpoint": "vit_v4/vit_v4_best.pth",
         "size": 224,
         "mean": (0.5, 0.5, 0.5),
         "std": (0.5, 0.5, 0.5),
     },
     "Swin-Tiny": {
         "architecture": "swin_tiny_patch4_window7_224",
-        "checkpoint": "swin_v4_best.pth",
+        "checkpoint": "swin_v4/swin_v4_best.pth",
         "size": 224,
         "mean": (0.485, 0.456, 0.406),
         "std": (0.229, 0.224, 0.225),
     },
     "MobileViT-S": {
         "architecture": "mobilevit_s",
-        "checkpoint": "mobilevit_v4_best.pth",
+        "checkpoint": "mobilevit_v4/mobilevit_v4_best.pth",
         "size": 256,
         "mean": (0.0, 0.0, 0.0),
         "std": (1.0, 1.0, 1.0),

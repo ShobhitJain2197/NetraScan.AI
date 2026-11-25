@@ -1,0 +1,2 @@
+model,dataset,test_images,accuracy,macro_precision,macro_recall,macro_f1,parameters
+MobileViT-S,V4,571,0.9824868651488616,0.9833800542506963,0.9823636659234486,0.9826610431950357,4939555

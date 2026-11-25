@@ -1,0 +1,8 @@
+﻿{
+    "model":  "Majority-voting ensemble",
+    "dataset":  "V4",
+    "test_images":  571,
+    "correct_predictions":  561,
+    "errors":  10,
+    "accuracy":  0.98248686514886163
+}

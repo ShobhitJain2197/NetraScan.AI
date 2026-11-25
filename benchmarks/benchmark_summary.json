@@ -1,0 +1,63 @@
+{
+  "project": "NetraScan.AI V2",
+  "hardware": {
+    "gpu": "NVIDIA GeForce RTX 3080",
+    "gpu_capacity_mib": 12288,
+    "cpu": "Intel Core i7-12700K",
+    "ram_gib": 64
+  },
+  "llm": {
+    "model": "Qwen2.5-3B-Instruct",
+    "quantization": "Q4_K_M",
+    "backend": "b12716",
+    "standalone_startup_seconds": 6.061,
+    "standalone_generation_tokens_per_second": 205.36564419468664,
+    "integrated_generation_tokens_per_second": 134.78663276034038
+  },
+  "runtime": {
+    "import_seconds": 5.349,
+    "cold_vision_seconds": 2.179,
+    "warm_vision_seconds": 0.079,
+    "cold_genai_seconds": 1.854,
+    "warm_report_seconds": 0.336,
+    "warm_combined_stage_seconds": 0.415,
+    "individual_model_latency_ms": {
+      "ViT-B/16": 159.42,
+      "Swin-Tiny": 58.2,
+      "MobileViT-S": 61.54
+    }
+  },
+  "gpu_memory": {
+    "baseline_mib": 2458,
+    "vision_loaded_mib": 3451,
+    "combined_loaded_mib": 5750,
+    "after_llm_shutdown_mib": 3448,
+    "vision_incremental_mib": 993,
+    "llm_incremental_mib": 2299,
+    "combined_incremental_mib": 3292,
+    "llm_released_mib": 2302,
+    "torch_memory": {
+      "allocated_mib": 582.34,
+      "reserved_mib": 738.0,
+      "peak_allocated_mib": 713.16
+    }
+  },
+  "validation": {
+    "structured_accepted": 0,
+    "structured_total": 3,
+    "grounded_original_accepted": 1,
+    "grounded_corrected_accepted": 3,
+    "grounded_total": 3,
+    "adversarial_rejected": 10,
+    "adversarial_total": 10
+  },
+  "limitations": [
+    "Runtime measurements are individual recorded runs.",
+    "LLM workloads differ in prompt length and caching.",
+    "Cold GenAI timing excludes PDF creation.",
+    "Warm report timing includes PDF creation.",
+    "Validation uses a small designed synthetic test suite.",
+    "GPU memory values include background device usage.",
+    "Clinical validation has not been established."
+  ]
+}

@@ -1,99 +1,177 @@
 # NetraScan.AI Dataset
 
-This directory contains dataset metadata and split manifests used for **NetraScan.AI**.
+This directory contains the dataset metadata, visual-family assignments
+and split manifests used in the NetraScan.AI research project.
 
-Raw medical images are **not stored in this repository**. The original datasets can be obtained from their respective sources below.
+Raw medical images are not distributed with this repository.
 
-## Dataset Sources
+## 1. Dataset Sources
 
-The project currently uses data collected from the following datasets:
+### Cataract v01
 
-### 1. Cataract v01
+- Version: v7
+- Images included: 587
+- Classes: Normal, Immature Cataract, Mature Cataract
+- Source: https://universe.roboflow.com/cataract/cataract-v01
 
-A cataract image classification dataset containing three classes:
+### Dataset Katarak
 
-- Normal
-- Immature Cataract
-- Mature Cataract
+- Images included: 2,955
+- Classes: Normal, Immature Cataract, Mature Cataract
+- Source: https://www.kaggle.com/datasets/rifdana/dataset-katarak-sinilis
 
-**Source:**  
-https://universe.roboflow.com/cataract/cataract-v01
+### SLID - Slit-Lamp Image Dataset
 
-**Version used:** v7
+SLID provides annotated anterior-eye slit-lamp images and anatomical
+and lesion-level annotations.
 
----
+- Repository: https://github.com/xumingyu-hub/SLID
+- Research paper: https://doi.org/10.3389/fdgth.2025.1716501
 
-### 2. Dataset Katarak
+SLID was considered separately for additional analysis and future
+extensions. It was not merged into the final V4 three-class
+classification dataset.
 
-A cataract classification dataset containing:
+## 2. Classification Categories
 
-- Normal
-- Immature Cataract
-- Mature Cataract
+| Class index | Category |
+|---:|---|
+| 0 | Normal |
+| 1 | Immature Cataract |
+| 2 | Mature Cataract |
 
-**Source:**  
-https://www.kaggle.com/datasets/rifdana/dataset-katarak-sinilis
+## 3. Dataset Engineering Pipeline
 
----
-
-### 3. SLID — Slit-Lamp Image Dataset
-
-SLID contains annotated anterior-eye slit-lamp images with anatomical and lesion-level annotations.
-
-It includes annotations for:
-
-- Cataract
-- Intraocular Lens
-- Lens Dislocation
-- Cornea
-- Pupil
-- Conjunctiva
-- Other anterior-eye conditions
-
-**Dataset Repository:**  
-https://github.com/xumingyu-hub/SLID
-
-**Research Paper:**  
-https://doi.org/10.3389/fdgth.2025.1716501
-
----
-
-## Current Classification Classes
-
-The current NetraScan.AI classification pipeline uses three classes:
-
-- Normal
-- Immature Cataract
-- Mature Cataract
-
-SLID images are currently retained separately for additional analysis and future extensions rather than being directly merged into the primary three-class training dataset.
-
-## Dataset Engineering Pipeline
-
-Before model training, the datasets undergo:
+The dataset preparation workflow includes:
 
 - Dataset integrity verification
 - Metadata generation
-- SHA-256 exact duplicate detection
+- SHA-256 exact duplicate analysis
 - Perceptual hashing (pHash)
 - Cross-dataset duplicate analysis
 - Near-duplicate analysis
 - Visual-family grouping using Union-Find
 - Class distribution analysis
-- Leakage-aware train/validation/test splitting
+- Leakage-aware dataset partitioning
 
-The final three-class dataset contains **3,542 images** divided into:
+## 4. Historical and Final Dataset Splits
 
-| Split | Images |
+Both historical and final V4 manifests are retained for
+research traceability.
+
+| Partition | Historical split | Final V4 split |
+|---|---:|---:|
+| Training | 2,487 | 2,454 |
+| Validation | 536 | 517 |
+| Testing | 519 | 571 |
+| Total | 3,542 | 3,542 |
+
+The final V4 split is the reference partition for the reported
+ViT-B/16, Swin-Tiny and MobileViT-S evaluation results.
+
+## 5. Final V4 Class Distribution
+
+| Category | Training | Validation | Testing | Total |
+|---|---:|---:|---:|---:|
+| Normal | 799 | 178 | 192 | 1,169 |
+| Immature Cataract | 837 | 164 | 195 | 1,196 |
+| Mature Cataract | 818 | 175 | 184 | 1,177 |
+| Total | 2,454 | 517 | 571 | 3,542 |
+
+## 6. Final V4 Source Distribution
+
+| Source | Training | Validation | Testing | Total |
+|---|---:|---:|---:|---:|
+| Cataract v01 | 386 | 75 | 126 | 587 |
+| Dataset Katarak | 2,068 | 442 | 445 | 2,955 |
+| Total | 2,454 | 517 | 571 | 3,542 |
+
+## 7. Dataset Integrity Checks
+
+| Integrity criterion | Observed result |
 |---|---:|
-| Train | 2,487 |
-| Validation | 536 |
-| Test | 519 |
+| Total images | 3,542 |
+| Detected visual families | 2,746 |
+| Visual families crossing partitions | 0 |
+| Cross-partition pHash pairs at distance <= 4 | 0 |
+| Detected Roboflow lineages crossing partitions | 0 |
+| Missing image paths during original verification | 0 |
 
-Related images belonging to the same detected visual family are kept within the same dataset partition to reduce train-validation-test leakage.
+These checks reduce detectable image-level leakage but do not
+establish patient-level independence.
 
-## Important Note
+## 8. Metadata Organization
 
-The dataset split is **visual-family-aware**, not guaranteed patient-level, because sufficient patient identifiers are not available across all source datasets.
+The historical manifests are located directly under `metadata/`.
 
-The same dataset manifests will be used for **ViT, Swin Transformer, MobileViT, and the CNN baseline** to ensure a controlled architecture comparison.
+The final V4 manifests and split configuration are located under
+`metadata/v4/`.
+
+Each image metadata record contains:
+
+- Dataset source
+- Original split
+- Filename
+- Classification label
+- Relative image path
+- SHA-256 hash
+- Perceptual hash
+- Visual family identifier
+- Visual family size
+- Assigned experimental split
+
+## 9. Reproducing the Dataset Layout
+
+Download the original datasets from their respective sources.
+
+The relative image paths assume the following directory structure:
+
+```
+DATASET_ROOT/
+    Cataract v01.v7i.folder/
+        train/
+            normal/
+            immature/
+            mature/
+    Dataset Katarak/
+        train/
+            normal/
+            immature/
+            mature/
+        test/
+            normal/
+            immature/
+            mature/
+```
+
+Configure the dataset root in the relevant research notebook.
+
+The notebooks use example Windows workspace paths, such as
+`C:\NetraScanWorkspace\MY PROJECT E PAARVAI`, which must be
+adapted to the local environment.
+
+The historical CSV manifests have been normalized to relative paths
+for portability. Their labels, hashes, visual-family assignments
+and partition assignments are unchanged.
+
+The final V4 metadata remains unchanged.
+
+## 10. Research Limitations
+
+The dataset partitioning is visual-family-aware rather than
+guaranteed patient-level.
+
+External clinical validation, patient-level independence and
+clinical probability calibration have not been established.
+
+Users must comply with the original dataset licensing and
+redistribution requirements.
+
+NetraScan.AI is an academic research prototype and is not intended
+for independent clinical diagnosis.
+
+---
+
+**Created by Mr. SHOBHIT JAIN**
+
+**Three Transformers. One Vision.**

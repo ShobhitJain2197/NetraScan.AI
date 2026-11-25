@@ -1,0 +1,29 @@
+{
+  "model": "MobileViT-S",
+  "architecture": "mobilevit_s",
+  "dataset": "V4",
+  "train_images": 2454,
+  "val_images": 517,
+  "test_images": 571,
+  "parameters": 4939555,
+  "epochs_max": 10,
+  "learning_rate": 2e-05,
+  "weight_decay": 0.01,
+  "batch_size": 16,
+  "patience": 3,
+  "checkpoint_selection": "validation_macro_f1",
+  "input_size": [
+    256,
+    256
+  ],
+  "mean": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "std": [
+    1.0,
+    1.0,
+    1.0
+  ]
+}
